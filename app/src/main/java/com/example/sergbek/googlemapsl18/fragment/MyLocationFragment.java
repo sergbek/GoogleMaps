@@ -11,6 +11,7 @@ import android.view.Window;
 import android.widget.TextView;
 
 import com.example.sergbek.googlemapsl18.R;
+import com.example.sergbek.googlemapsl18.asynctask.LoaderLocationAsyncTask;
 
 import java.io.IOException;
 import java.util.List;
@@ -44,29 +45,31 @@ public class MyLocationFragment extends DialogFragment {
         mLat.setText("Широта: " + String.valueOf(lat));
         mLng.setText("Долгота: " + String.valueOf(lng));
 
-        Geocoder geocoder=new Geocoder(getActivity(), Locale.getDefault());
+//        Geocoder geocoder=new Geocoder(getActivity(), Locale.getDefault());
 
-        List<Address> addresses;
-        try {
-            addresses = geocoder.getFromLocation(lat, lng, 1);
-
-            if (addresses != null) {
-                Address returnedAddress = addresses.get(0);
-                StringBuilder strReturnedAddress = new StringBuilder(
-                        "Адрес:\n");
-                for (int i = 0; i < returnedAddress.getMaxAddressLineIndex(); i++) {
-                    strReturnedAddress
-                            .append(returnedAddress.getAddressLine(i)).append(
-                            "\n");
-                }
-                mAddress.setText(strReturnedAddress.toString());
-            } else {
-                mAddress.setText("Нет адресов!");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            mAddress.setText("Не могу получить адрес!");
-        }
+//        List<Address> addresses;
+        LoaderLocationAsyncTask loaderLocationAsyncTask=new LoaderLocationAsyncTask(mAddress);
+        loaderLocationAsyncTask.execute(lat,lng);
+//        try {
+//            addresses = geocoder.getFromLocation(lat, lng, 1);
+//
+//            if (addresses != null) {
+//                Address returnedAddress = addresses.get(0);
+//                StringBuilder strReturnedAddress = new StringBuilder(
+//                        "Адрес:\n");
+//                for (int i = 0; i < returnedAddress.getMaxAddressLineIndex(); i++) {
+//                    strReturnedAddress
+//                            .append(returnedAddress.getAddressLine(i)).append(
+//                            "\n");
+//                }
+//                mAddress.setText(strReturnedAddress.toString());
+//            } else {
+//                mAddress.setText("Нет адресов!");
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            mAddress.setText("Не могу получить адрес!");
+//        }
 
         return mRootView;
     }
