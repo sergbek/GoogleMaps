@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ff26b4e9"
+    android:gravity="center">
+
+    <ImageView
+        android:layout_width="110dp"
+        android:layout_height="120dp"
+        android:id="@+id/iv_FM" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="browse"
+        android:id="@+id/browse_FM"
+        android:layout_below="@+id/iv_FM"
+        android:layout_alignLeft="@+id/iv_FM"
+        android:layout_alignStart="@+id/iv_FM"
+        android:layout_marginTop="10dp"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editTittle_FM"
+        android:ems="10"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@+id/iv_FM"
+        android:layout_toEndOf="@+id/iv_FM"
+        android:layout_alignBottom="@+id/iv_FM"
+        android:layout_alignTop="@+id/iv_FM" />
+
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ok"
+        android:id="@+id/ok_FM"
+        android:layout_alignTop="@+id/browse_FM"
+        android:layout_alignRight="@+id/editTittle_FM"
+        android:layout_alignEnd="@+id/editTittle_FM" />
+</RelativeLayout>
