@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.sergbek.googlemapsl18.R;
@@ -18,12 +20,15 @@ import java.util.List;
 import java.util.Locale;
 
 
-public class MyLocationFragment extends DialogFragment {
+public class MyLocationFragment extends DialogFragment implements View.OnClickListener {
 
     private View mRootView;
+
     private TextView mLat;
     private TextView mLng;
     private TextView mAddress;
+    private Button mOk;
+    private ProgressBar mProgressBar;
 
     double lat = 48.6024;
     double lng = 22.2384;
@@ -45,47 +50,33 @@ public class MyLocationFragment extends DialogFragment {
         mLat.setText("Широта: " + String.valueOf(lat));
         mLng.setText("Долгота: " + String.valueOf(lng));
 
-//        Geocoder geocoder=new Geocoder(getActivity(), Locale.getDefault());
 
-//        List<Address> addresses;
-        LoaderLocationAsyncTask loaderLocationAsyncTask=new LoaderLocationAsyncTask(mAddress);
+        LoaderLocationAsyncTask loaderLocationAsyncTask=new LoaderLocationAsyncTask(mAddress,mProgressBar);
         loaderLocationAsyncTask.execute(lat,lng);
-//        try {
-//            addresses = geocoder.getFromLocation(lat, lng, 1);
-//
-//            if (addresses != null) {
-//                Address returnedAddress = addresses.get(0);
-//                StringBuilder strReturnedAddress = new StringBuilder(
-//                        "Адрес:\n");
-//                for (int i = 0; i < returnedAddress.getMaxAddressLineIndex(); i++) {
-//                    strReturnedAddress
-//                            .append(returnedAddress.getAddressLine(i)).append(
-//                            "\n");
-//                }
-//                mAddress.setText(strReturnedAddress.toString());
-//            } else {
-//                mAddress.setText("Нет адресов!");
-//            }
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            mAddress.setText("Не могу получить адрес!");
-//        }
+
+        mOk.setOnClickListener(this);
 
         return mRootView;
     }
 
     private void defineComponents() {
-        mLat = (TextView) mRootView.findViewById(R.id.latitude);
-        mLng = (TextView) mRootView.findViewById(R.id.longitude);
-        mAddress = (TextView) mRootView.findViewById(R.id.address);
+        mLat = (TextView) mRootView.findViewById(R.id.latitude_FML);
+        mLng = (TextView) mRootView.findViewById(R.id.longitude_FML);
+        mAddress = (TextView) mRootView.findViewById(R.id.address_FML);
+        mOk = (Button) mRootView.findViewById(R.id.btnOk_FML);
+        mProgressBar = (ProgressBar) mRootView.findViewById(R.id.progressBar_FML);
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        removeTitleDialog();
+        getDialog().setTitle("My Location");
+        setCancelable(false);
     }
 
-    private void removeTitleDialog(){
-        getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+
+    @Override
+    public void onClick(View v) {
+        dismiss();
     }
 }

@@ -1,6 +1,7 @@
 package com.example.sergbek.googlemapsl18.activity;
 
 import android.content.Context;
+import android.location.LocationManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,6 +18,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback, View.OnClickListener {
     private GoogleMap mMap;
     private Button mBtnMyLocation;
+    private LocationManager mLocationManager;
     private static Context sContext;
 
     @Override
@@ -24,11 +26,19 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         sContext=getBaseContext();
-
-        mBtnMyLocation= (Button) findViewById(R.id.btn_myLocation_AM);
+        defineComponents();
+        initMap();
+        mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         mBtnMyLocation.setOnClickListener(this);
+    }
+
+    private void initMap() {
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map_AM);
         mapFragment.getMapAsync(this);
+    }
+
+    private void defineComponents() {
+        mBtnMyLocation= (Button) findViewById(R.id.btn_myLocation_AM);
     }
 
 

@@ -4,6 +4,8 @@ package com.example.sergbek.googlemapsl18.asynctask;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.AsyncTask;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.sergbek.googlemapsl18.activity.MainActivity;
@@ -15,9 +17,11 @@ import java.util.Locale;
 public class LoaderLocationAsyncTask extends AsyncTask<Double,Void,String> {
 
     private TextView mAddress;
+    private ProgressBar mProgressBar;
 
-    public LoaderLocationAsyncTask(TextView address) {
+    public LoaderLocationAsyncTask(TextView address,ProgressBar progressBar) {
         this.mAddress = address;
+        this.mProgressBar=progressBar;
     }
 
 
@@ -33,12 +37,14 @@ public class LoaderLocationAsyncTask extends AsyncTask<Double,Void,String> {
             if (addresses != null) {
                 Address returnedAddress = addresses.get(0);
                 StringBuilder strReturnedAddress = new StringBuilder(
-                        "Адрес:\n");
+                        "Address:\n \n");
                 for (int i = 0; i < returnedAddress.getMaxAddressLineIndex(); i++) {
                     strReturnedAddress
                             .append(returnedAddress.getAddressLine(i)).append(
                             "\n");
                 }
+                strReturnedAddress.append(returnedAddress.getCountryName()+"\n");
+
                 return strReturnedAddress.toString();
             }
             else
@@ -53,6 +59,8 @@ public class LoaderLocationAsyncTask extends AsyncTask<Double,Void,String> {
 
     @Override
     protected void onPostExecute(String s) {
+        mAddress.setVisibility(View.VISIBLE);
+        mProgressBar.setVisibility(View.GONE);
         mAddress.setText(s);
 
     }
