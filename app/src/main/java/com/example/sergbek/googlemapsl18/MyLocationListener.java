@@ -3,7 +3,6 @@ package com.example.sergbek.googlemapsl18;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.example.sergbek.googlemapsl18.activity.MainActivity;
 

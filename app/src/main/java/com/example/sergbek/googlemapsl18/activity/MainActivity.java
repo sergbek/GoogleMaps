@@ -4,12 +4,16 @@ import android.content.Context;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.BounceInterpolator;
 import android.widget.Button;
 
+import com.example.sergbek.googlemapsl18.DataBase;
+import com.example.sergbek.googlemapsl18.MarkerEntity;
 import com.example.sergbek.googlemapsl18.MyLocationListener;
 import com.example.sergbek.googlemapsl18.R;
 import com.example.sergbek.googlemapsl18.fragment.MyLocationFragment;
@@ -18,9 +22,16 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.List;
 
 
-public class MainActivity extends AppCompatActivity implements OnMapReadyCallback, View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements OnMapReadyCallback,
+                                                                View.OnClickListener,
+                                                                GoogleMap.OnMapClickListener,
+                                                                GoogleMap.OnMapLongClickListener, GoogleMap.OnMarkerClickListener {
     
     private GoogleMap mMap;
     private Button mBtnMyLocation;
@@ -28,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private String mProvider;
     private Location mLocation;
     private MyLocationListener mLocationListener;
+    private DataBase mDataBase;
 
     private static Context sContext;
 
@@ -44,11 +56,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         sContext=getBaseContext();
         defineComponents();
 
+        mDataBase=new DataBase(this);
+
         mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         selectBestProvider();
         mLocation = mLocationManager.getLastKnownLocation(mProvider);
-        Log.d("www", mProvider);
+
         initMap();
         mBtnMyLocation.setOnClickListener(this);
         mLocationListener = new MyLocationListener(this);
@@ -85,16 +99,30 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap.getUiSettings().setCompassEnabled(true);
         mMap.setMyLocationEnabled(true);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(48.37, 31.16), 5));
+        mMap.setOnMapClickListener(this);
+        mMap.setOnMapLongClickListener(this);
+        mMap.setOnMarkerClickListener(this);
+        List<MarkerEntity> markerList=mDataBase.getAllMarker();
+
+        for (int i = 0; i < markerList.size(); i++) {
+            double latitude     = Double.parseDouble(markerList.get(i).getLatitude());
+            double longitude    = Double.parseDouble(markerList.get(i).getLongitude());
+            mMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(latitude, longitude))
+                    .title(markerList.get(0).getTitle())
+                    .snippet("Здесь был Васька"));
+        }
+
     }
 
     @Override
     public void onClick(View v) {
         MyLocationFragment myLocationFragment=new MyLocationFragment();
         Bundle bundle=new Bundle();
-        bundle.putDouble("lat",lat);
-        bundle.putDouble("lng",lng);
+        bundle.putDouble("lat", lat);
+        bundle.putDouble("lng", lng);
         myLocationFragment.setArguments(bundle);
-        myLocationFragment.show(getFragmentManager(),"myLocation");
+        myLocationFragment.show(getFragmentManager(), "myLocation");
     }
 
     public static Context getContext() {
@@ -121,5 +149,32 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             lat=location.getLatitude();
             lng=location.getLongitude();
         }
+    }
+
+    @Override
+    public void onMapClick(LatLng latLng) {
+        mMap.addMarker(new MarkerOptions()
+                .position(latLng)
+                .title("Marker")
+                .snippet("Здесь был Васька"));
+
+        mDataBase.addMarker(new MarkerEntity(String.valueOf(latLng.latitude),
+                                            String.valueOf(latLng.longitude),
+                                            "Marker",""));
+
+    }
+
+
+    @Override
+    public void onMapLongClick(LatLng latLng) {
+//        mMap.mar
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        marker.remove();
+//        marker.getPosition();
+//        mDataBase.deleteMarker();
+        return true;
     }
 }

@@ -51,8 +51,6 @@ public class MyLocationFragment extends DialogFragment implements View.OnClickLi
         lat=getArguments().getDouble("lat");
         lng=getArguments().getDouble("lng");
 
-        Log.d("www", lat + "______" + lng);
-
         mLat.setText("Широта: " + String.valueOf(lat));
         mLng.setText("Долгота: " + String.valueOf(lng));
 
