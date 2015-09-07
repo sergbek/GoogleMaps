@@ -32,29 +32,31 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private static Context sContext;
 
     private static final long MINIMUM_DISTANCE_FOR_UPDATES = 10;
-    private static final long MINIMUM_TIME_BETWEEN_UPDATES = 2000;
+    private static final long MINIMUM_TIME_BETWEEN_UPDATES = 10000;
 
-    private  double lat ;
+    private  double lat;
     private  double lng;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         sContext=getBaseContext();
+        defineComponents();
 
         mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-        defineComponents();
         selectBestProvider();
         mLocation = mLocationManager.getLastKnownLocation(mProvider);
-        mLocationListener = new MyLocationListener(this);
-        showCurrentLocation(mLocation);
+        Log.d("www", mProvider);
         initMap();
         mBtnMyLocation.setOnClickListener(this);
-        Log.d("tag",mProvider);
+        mLocationListener = new MyLocationListener(this);
+
+        setMyLocation(mLocation);
     }
 
-    private void selectBestProvider() {
+    public void selectBestProvider() {
         Criteria criteria = new Criteria();
         criteria.setAccuracy(Criteria.ACCURACY_COARSE);
         criteria.setPowerRequirement(Criteria.POWER_LOW);
@@ -82,6 +84,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.getUiSettings().setCompassEnabled(true);
         mMap.setMyLocationEnabled(true);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(48.37, 31.16), 5));
     }
 
     @Override
@@ -112,7 +115,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         mLocationManager.removeUpdates(mLocationListener);
     }
 
-    public void showCurrentLocation(Location location) {
+
+    public void setMyLocation(Location location) {
         if (location != null) {
             lat=location.getLatitude();
             lng=location.getLongitude();

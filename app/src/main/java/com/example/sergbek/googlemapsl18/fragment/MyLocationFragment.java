@@ -4,6 +4,7 @@ import android.app.DialogFragment;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,6 +50,8 @@ public class MyLocationFragment extends DialogFragment implements View.OnClickLi
         defineComponents();
         lat=getArguments().getDouble("lat");
         lng=getArguments().getDouble("lng");
+
+        Log.d("www", lat + "______" + lng);
 
         mLat.setText("Широта: " + String.valueOf(lat));
         mLng.setText("Долгота: " + String.valueOf(lng));

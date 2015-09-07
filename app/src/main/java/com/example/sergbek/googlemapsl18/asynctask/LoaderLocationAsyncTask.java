@@ -33,8 +33,7 @@ public class LoaderLocationAsyncTask extends AsyncTask<Double,Void,String> {
         try {
             addresses = geocoder.getFromLocation(params[0], params[1], 1);
 
-
-            if (addresses != null) {
+            if (!addresses.isEmpty()) {
                 Address returnedAddress = addresses.get(0);
                 StringBuilder strReturnedAddress = new StringBuilder(
                         "Address:\n \n");
