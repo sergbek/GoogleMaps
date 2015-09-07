@@ -6,3 +6,15 @@
 /build
 /captures
 app/app.iml
+
+*.iml
+*.iws
+*.ipr
+.idea/
+.gradle/
+local.properties
+
+*/build/
+
+*~
+*.swp
