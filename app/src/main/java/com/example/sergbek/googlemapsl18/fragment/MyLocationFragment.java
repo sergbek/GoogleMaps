@@ -13,6 +13,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.sergbek.googlemapsl18.R;
+import com.example.sergbek.googlemapsl18.activity.MainActivity;
 import com.example.sergbek.googlemapsl18.asynctask.LoaderLocationAsyncTask;
 
 import java.io.IOException;
@@ -30,8 +31,8 @@ public class MyLocationFragment extends DialogFragment implements View.OnClickLi
     private Button mOk;
     private ProgressBar mProgressBar;
 
-    double lat = 48.6024;
-    double lng = 22.2384;
+    private double lat;
+    private double lng;
 
 
     @Override
@@ -46,6 +47,8 @@ public class MyLocationFragment extends DialogFragment implements View.OnClickLi
                 inflater.inflate(R.layout.fragment_my_location, container);
 
         defineComponents();
+        lat=getArguments().getDouble("lat");
+        lng=getArguments().getDouble("lng");
 
         mLat.setText("Широта: " + String.valueOf(lat));
         mLng.setText("Долгота: " + String.valueOf(lng));
