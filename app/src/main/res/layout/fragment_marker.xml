@@ -9,7 +9,7 @@
         android:layout_width="110dp"
         android:layout_height="120dp"
         android:id="@+id/iv_FM"
-        android:background="@drawable/ic_marker"/>
+        android:layout_margin="5dp" />
 
     <Button
         android:layout_width="wrap_content"

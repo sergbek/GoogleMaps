@@ -1,20 +1,23 @@
 package com.example.sergbek.googlemapsl18.activity;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
-import android.os.SystemClock;
+import android.media.ThumbnailUtils;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.view.animation.BounceInterpolator;
 import android.widget.Button;
 
 import com.example.sergbek.googlemapsl18.DataBase;
 import com.example.sergbek.googlemapsl18.MarkerEntity;
+import com.example.sergbek.googlemapsl18.MyInfoWindowAdapter;
 import com.example.sergbek.googlemapsl18.MyLocationListener;
+import com.example.sergbek.googlemapsl18.OnMarkerCompletionListeners;
 import com.example.sergbek.googlemapsl18.R;
 import com.example.sergbek.googlemapsl18.fragment.MarkerFragment;
 import com.example.sergbek.googlemapsl18.fragment.MyLocationFragment;
@@ -22,17 +25,18 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.IOException;
 import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback,
-                                                                View.OnClickListener,
-                                                                GoogleMap.OnMapClickListener,
-                                                                GoogleMap.OnMapLongClickListener, GoogleMap.OnMarkerClickListener {
+        View.OnClickListener, GoogleMap.OnMapClickListener, GoogleMap.OnMapLongClickListener
+        ,OnMarkerCompletionListeners {
     
     private GoogleMap mMap;
     private Button mBtnMyLocation;
@@ -41,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private Location mLocation;
     private MyLocationListener mLocationListener;
     private DataBase mDataBase;
+    private LatLng mCurrentMarkerLatLng;
 
     private static Context sContext;
 
@@ -95,24 +100,28 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(GoogleMap googleMap) {
         mMap=googleMap;
         mMap.setTrafficEnabled(true);
-        mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.getUiSettings().setCompassEnabled(true);
         mMap.setMyLocationEnabled(true);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(48.37, 31.16), 5));
         mMap.setOnMapClickListener(this);
         mMap.setOnMapLongClickListener(this);
-        mMap.setOnMarkerClickListener(this);
+
         List<MarkerEntity> markerList=mDataBase.getAllMarker();
 
         for (int i = 0; i < markerList.size(); i++) {
             double latitude     = Double.parseDouble(markerList.get(i).getLatitude());
             double longitude    = Double.parseDouble(markerList.get(i).getLongitude());
+            LatLng latLng=new LatLng(latitude,longitude);
             mMap.addMarker(new MarkerOptions()
-                    .position(new LatLng(latitude, longitude))
-                    .title(markerList.get(0).getTitle())
-                    .snippet("Здесь был Васька"));
+                    .position(latLng)
+                    .title(markerList.get(i).getTitle())
+                    .snippet(createSnippet(latLng))
+                    .icon(convertUriImageToBitmapDescriptor(Uri.parse(markerList.get(i).getPhoto()))));
         }
+
+        mMap.setInfoWindowAdapter(new MyInfoWindowAdapter(this));
 
     }
 
@@ -154,29 +163,51 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void onMapClick(LatLng latLng) {
-        mMap.addMarker(new MarkerOptions()
-                .position(latLng)
-                .title("Marker")
-                .snippet("Здесь был Васька"));
-
-        mDataBase.addMarker(new MarkerEntity(String.valueOf(latLng.latitude),
-                                            String.valueOf(latLng.longitude),
-                                            "Marker",""));
 
     }
 
 
     @Override
     public void onMapLongClick(LatLng latLng) {
+        this.mCurrentMarkerLatLng=latLng;
         MarkerFragment markerFragment=new MarkerFragment();
         markerFragment.show(getFragmentManager(),"markerFragment");
     }
 
+
+
     @Override
-    public boolean onMarkerClick(Marker marker) {
-        marker.remove();
-//        marker.getPosition();
-//        mDataBase.deleteMarker();
-        return true;
+    public void onDone(Uri uriString, String tittle) {
+        mMap.addMarker(new MarkerOptions()
+                .position(mCurrentMarkerLatLng)
+                .title(tittle)
+                .snippet(createSnippet(mCurrentMarkerLatLng))
+                .icon(convertUriImageToBitmapDescriptor(uriString)));
+
+        mDataBase.addMarker(new MarkerEntity(String.valueOf(mCurrentMarkerLatLng.latitude),
+                String.valueOf(mCurrentMarkerLatLng.longitude),
+                tittle, String.valueOf(uriString)));
+
+    }
+
+    private BitmapDescriptor convertUriImageToBitmapDescriptor(Uri imgUri) {
+        BitmapDescriptor icon = null;
+        if (imgUri != null) {
+            try {
+                Bitmap bitmap;
+                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imgUri);
+                bitmap = ThumbnailUtils.extractThumbnail(bitmap, 100, 100);
+                icon = BitmapDescriptorFactory.fromBitmap(bitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return icon;
+    }
+
+    private String createSnippet(LatLng latLng) {
+        return "Location: " + String.format("%1$s || %2$s",
+                String.valueOf(latLng.latitude).substring(0, 5),
+                String.valueOf(latLng.longitude).substring(0, 5));
     }
 }

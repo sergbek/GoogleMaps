@@ -12,6 +12,10 @@ public class MarkerEntity {
     public MarkerEntity() {
     }
 
+    public MarkerEntity(String photo) {
+        this.photo = photo;
+    }
+
     public MarkerEntity(String latitude, String longitude, String title, String photo) {
         this.latitude = latitude;
         this.longitude = longitude;
@@ -59,5 +63,16 @@ public class MarkerEntity {
 
     public void setPhoto(String photo) {
         this.photo = photo;
+    }
+
+    @Override
+    public String toString() {
+        return "MarkerEntity{" +
+                "id='" + id + '\'' +
+                ", latitude='" + latitude + '\'' +
+                ", longitude='" + longitude + '\'' +
+                ", title='" + title + '\'' +
+                ", photo='" + photo + '\'' +
+                '}';
     }
 }

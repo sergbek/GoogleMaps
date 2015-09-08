@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +13,11 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.example.sergbek.googlemapsl18.OnMarkerCompletionListeners;
 import com.example.sergbek.googlemapsl18.R;
+import com.example.sergbek.googlemapsl18.activity.MainActivity;
 
 
 public class MarkerFragment extends DialogFragment implements View.OnClickListener {
@@ -24,10 +26,19 @@ public class MarkerFragment extends DialogFragment implements View.OnClickListen
     private Button mOk;
     private EditText mEditTittle;
     private ImageView mImageView;
+    private OnMarkerCompletionListeners mCompletionListeners;
+
 
     private Uri mNewPhoto;
 
     private static final  int CODE_GET_FROM_GALLERY = 0;
+
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        this.mCompletionListeners = (OnMarkerCompletionListeners)activity;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,6 +55,7 @@ public class MarkerFragment extends DialogFragment implements View.OnClickListen
     public void onViewCreated(View view, Bundle savedInstanceState) {
         removeTitleDialog();
         defineComponents();
+        mImageView.setImageResource(R.drawable.ic_marker);
 
         mBrowse.setOnClickListener(this);
         mOk.setOnClickListener(this);
@@ -59,7 +71,12 @@ public class MarkerFragment extends DialogFragment implements View.OnClickListen
     }
 
     private void updateMarker() {
-
+        if (!mEditTittle.getText().toString().isEmpty()){
+            mCompletionListeners.onDone(mNewPhoto, mEditTittle.getText().toString());
+            dismiss();
+        }
+        else
+            Toast.makeText(MainActivity.getContext(),"Fill in note text",Toast.LENGTH_SHORT).show();
     }
 
     private void defineComponents() {
