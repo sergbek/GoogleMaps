@@ -16,6 +16,7 @@ import com.example.sergbek.googlemapsl18.DataBase;
 import com.example.sergbek.googlemapsl18.MarkerEntity;
 import com.example.sergbek.googlemapsl18.MyLocationListener;
 import com.example.sergbek.googlemapsl18.R;
+import com.example.sergbek.googlemapsl18.fragment.MarkerFragment;
 import com.example.sergbek.googlemapsl18.fragment.MyLocationFragment;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -167,7 +168,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void onMapLongClick(LatLng latLng) {
-//        mMap.mar
+        MarkerFragment markerFragment=new MarkerFragment();
+        markerFragment.show(getFragmentManager(),"markerFragment");
     }
 
     @Override
