@@ -61,18 +61,6 @@ public class DataBase extends SQLiteOpenHelper implements BaseColumns {
         db.close();
     }
 
-    public MarkerEntity getMarkerPhoto(int id) {
-        SQLiteDatabase db = this.getReadableDatabase();
-
-        Cursor cursor = db.query(DATABASE_TABLE, new String[] { COLUMN_PHOTO }, COLUMN_ID + "=?",
-                new String[] { String.valueOf(id) }, null, null, null, null);
-        if (cursor != null)
-            cursor.moveToFirst();
-
-        MarkerEntity markerEntity = new MarkerEntity(cursor.getString(0));
-
-        return markerEntity;
-    }
 
 
     public List<MarkerEntity> getAllMarker() {

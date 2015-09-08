@@ -12,6 +12,8 @@ import com.example.sergbek.googlemapsl18.activity.MainActivity;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Marker;
 
+import java.util.Map;
+
 public class MyInfoWindowAdapter implements GoogleMap.InfoWindowAdapter{
 
     private final View mRootView;
@@ -20,12 +22,12 @@ public class MyInfoWindowAdapter implements GoogleMap.InfoWindowAdapter{
     private TextView mTvTittle;
     private TextView mTvSnippet;
 
-    private DataBase mDataBase;
+    private Map<Marker,Uri> mMarkersPhotoMap;
 
-    public MyInfoWindowAdapter(MainActivity activity) {
+    public MyInfoWindowAdapter(MainActivity activity,Map<Marker,Uri> markersPhotoMap) {
         mRootView = activity.getLayoutInflater().inflate(
                 R.layout.custom_info_window, null);
-        mDataBase=new DataBase(activity);
+        this.mMarkersPhotoMap=markersPhotoMap;
     }
 
 
@@ -42,10 +44,9 @@ public class MyInfoWindowAdapter implements GoogleMap.InfoWindowAdapter{
 
         mTvTittle.setText(marker.getTitle());
         mTvSnippet.setText(marker.getSnippet());
-        MarkerEntity markerEntity=mDataBase.getMarkerPhoto(1);
 
-        Log.d("www",markerEntity.toString());
-        mImageView.setImageURI(Uri.parse(markerEntity.getPhoto()));
+        Uri photo=mMarkersPhotoMap.get(marker);
+        mImageView.setImageURI(photo);
 
         return mRootView;
     }

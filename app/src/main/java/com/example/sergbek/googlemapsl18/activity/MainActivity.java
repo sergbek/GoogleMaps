@@ -28,10 +28,13 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback,
@@ -46,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private MyLocationListener mLocationListener;
     private DataBase mDataBase;
     private LatLng mCurrentMarkerLatLng;
+    private Map<Marker,Uri> mMarkersPhotoMap;
 
     private static Context sContext;
 
@@ -63,6 +67,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         defineComponents();
 
         mDataBase=new DataBase(this);
+        mMarkersPhotoMap=new HashMap<>();
 
         mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
@@ -114,14 +119,16 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             double latitude     = Double.parseDouble(markerList.get(i).getLatitude());
             double longitude    = Double.parseDouble(markerList.get(i).getLongitude());
             LatLng latLng=new LatLng(latitude,longitude);
-            mMap.addMarker(new MarkerOptions()
-                    .position(latLng)
-                    .title(markerList.get(i).getTitle())
-                    .snippet(createSnippet(latLng))
-                    .icon(convertUriImageToBitmapDescriptor(Uri.parse(markerList.get(i).getPhoto()))));
+           Marker marker= mMap.addMarker(new MarkerOptions()
+                            .position(latLng)
+                            .title(markerList.get(i).getTitle())
+                            .snippet(createSnippet(latLng))
+                            .icon(convertUriImageToBitmapDescriptor(Uri.parse(markerList.get(i).getPhoto()))));
+
+            mMarkersPhotoMap.put(marker,Uri.parse(markerList.get(i).getPhoto()));
         }
 
-        mMap.setInfoWindowAdapter(new MyInfoWindowAdapter(this));
+        mMap.setInfoWindowAdapter(new MyInfoWindowAdapter(this,mMarkersPhotoMap));
 
     }
 
@@ -178,15 +185,17 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void onDone(Uri uriString, String tittle) {
-        mMap.addMarker(new MarkerOptions()
-                .position(mCurrentMarkerLatLng)
-                .title(tittle)
-                .snippet(createSnippet(mCurrentMarkerLatLng))
-                .icon(convertUriImageToBitmapDescriptor(uriString)));
+        Marker marker=mMap.addMarker(new MarkerOptions()
+                            .position(mCurrentMarkerLatLng)
+                            .title(tittle)
+                            .snippet(createSnippet(mCurrentMarkerLatLng))
+                            .icon(convertUriImageToBitmapDescriptor(uriString)));
 
         mDataBase.addMarker(new MarkerEntity(String.valueOf(mCurrentMarkerLatLng.latitude),
                 String.valueOf(mCurrentMarkerLatLng.longitude),
                 tittle, String.valueOf(uriString)));
+
+        mMarkersPhotoMap.put(marker,uriString);
 
     }
 
