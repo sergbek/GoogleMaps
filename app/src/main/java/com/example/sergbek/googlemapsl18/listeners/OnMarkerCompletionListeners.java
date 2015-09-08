@@ -1,4 +1,4 @@
-package com.example.sergbek.googlemapsl18;
+package com.example.sergbek.googlemapsl18.listeners;
 
 
 import android.net.Uri;

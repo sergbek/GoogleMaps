@@ -1,13 +1,12 @@
-package com.example.sergbek.googlemapsl18;
+package com.example.sergbek.googlemapsl18.view;
 
 
 import android.net.Uri;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.sergbek.googlemapsl18.R;
 import com.example.sergbek.googlemapsl18.activity.MainActivity;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Marker;
@@ -33,7 +32,6 @@ public class MyInfoWindowAdapter implements GoogleMap.InfoWindowAdapter{
 
     @Override
     public View getInfoWindow(Marker marker) {
-
         return null;
     }
 

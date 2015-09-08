@@ -35,7 +35,6 @@ public class MyLocationFragment extends DialogFragment implements View.OnClickLi
     private double lat;
     private double lng;
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,8 +75,6 @@ public class MyLocationFragment extends DialogFragment implements View.OnClickLi
         getDialog().setTitle("My Location");
         setCancelable(false);
     }
-
-
 
     @Override
     public void onClick(View v) {

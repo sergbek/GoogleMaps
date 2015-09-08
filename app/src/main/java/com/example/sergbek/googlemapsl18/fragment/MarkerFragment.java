@@ -15,7 +15,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.example.sergbek.googlemapsl18.OnMarkerCompletionListeners;
+import com.example.sergbek.googlemapsl18.listeners.OnMarkerCompletionListeners;
 import com.example.sergbek.googlemapsl18.R;
 import com.example.sergbek.googlemapsl18.activity.MainActivity;
 
@@ -28,11 +28,9 @@ public class MarkerFragment extends DialogFragment implements View.OnClickListen
     private ImageView mImageView;
     private OnMarkerCompletionListeners mCompletionListeners;
 
-
     private Uri mNewPhoto;
 
     private static final  int CODE_GET_FROM_GALLERY = 0;
-
 
     @Override
     public void onAttach(Activity activity) {
@@ -55,11 +53,10 @@ public class MarkerFragment extends DialogFragment implements View.OnClickListen
     public void onViewCreated(View view, Bundle savedInstanceState) {
         removeTitleDialog();
         defineComponents();
-        mImageView.setImageResource(R.drawable.ic_marker);
+        mImageView.setImageResource(R.drawable.ic_question);
 
         mBrowse.setOnClickListener(this);
         mOk.setOnClickListener(this);
-
     }
 
     @Override

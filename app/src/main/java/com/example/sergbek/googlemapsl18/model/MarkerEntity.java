@@ -1,4 +1,4 @@
-package com.example.sergbek.googlemapsl18;
+package com.example.sergbek.googlemapsl18.model;
 
 
 public class MarkerEntity {
@@ -62,5 +62,14 @@ public class MarkerEntity {
         this.photo = photo;
     }
 
-
+    @Override
+    public String toString() {
+        return "MarkerEntity{" +
+                "id='" + id + '\'' +
+                ", latitude='" + latitude + '\'' +
+                ", longitude='" + longitude + '\'' +
+                ", title='" + title + '\'' +
+                ", photo='" + photo + '\'' +
+                '}';
+    }
 }

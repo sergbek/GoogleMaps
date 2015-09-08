@@ -1,4 +1,4 @@
-package com.example.sergbek.googlemapsl18;
+package com.example.sergbek.googlemapsl18.database;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
+
+import com.example.sergbek.googlemapsl18.model.MarkerEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,8 +63,6 @@ public class DataBase extends SQLiteOpenHelper implements BaseColumns {
         db.close();
     }
 
-
-
     public List<MarkerEntity> getAllMarker() {
         List<MarkerEntity> markerList = new ArrayList<>();
 
@@ -98,7 +98,6 @@ public class DataBase extends SQLiteOpenHelper implements BaseColumns {
 
         return count;
     }
-
 
     public void deleteMarker(MarkerEntity marker) {
         SQLiteDatabase db = this.getWritableDatabase();
