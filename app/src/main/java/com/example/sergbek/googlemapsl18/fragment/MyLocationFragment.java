@@ -1,25 +1,18 @@
 package com.example.sergbek.googlemapsl18.fragment;
 
 import android.app.DialogFragment;
-import android.location.Address;
-import android.location.Geocoder;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.sergbek.googlemapsl18.R;
-import com.example.sergbek.googlemapsl18.activity.MainActivity;
 import com.example.sergbek.googlemapsl18.asynctask.LoaderLocationAsyncTask;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Locale;
+
 
 
 public class MyLocationFragment extends DialogFragment implements View.OnClickListener {
@@ -47,12 +40,12 @@ public class MyLocationFragment extends DialogFragment implements View.OnClickLi
                 inflater.inflate(R.layout.fragment_my_location, container);
 
         defineComponents();
+
         lat=getArguments().getDouble("lat");
         lng=getArguments().getDouble("lng");
 
         mLat.setText("Широта: " + String.valueOf(lat));
         mLng.setText("Долгота: " + String.valueOf(lng));
-
 
         LoaderLocationAsyncTask loaderLocationAsyncTask=new LoaderLocationAsyncTask(mAddress,mProgressBar);
         loaderLocationAsyncTask.execute(lat,lng);

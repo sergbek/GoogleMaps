@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private static Context sContext;
 
     private static final long MINIMUM_DISTANCE_FOR_UPDATES = 10;
-    private static final long MINIMUM_TIME_BETWEEN_UPDATES = 10000;
+    private static final long MINIMUM_TIME_BETWEEN_UPDATES = 1000;
 
     private double mLat;
     private double mLng;
